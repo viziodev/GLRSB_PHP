@@ -22,6 +22,8 @@ $menus=[
 
 $categories=[];
 $idCat=0;
+$produits=[];
+$idProd=0;
 /*
 
 //Post Increment
@@ -49,7 +51,7 @@ do {
                 if ($categories[$i]["libelle"]== $libelle) {
                     $pos=$i;
                 }
-             }
+               }
             if($pos!=-1){
                 echo "Le Libelle du Produit existe deja\n";
             }
@@ -59,18 +61,92 @@ do {
         //Genere Id 
          $categorie=[
             "id"=>++$idCat,
-            "libelle"=>$libelle
+            "libelle"=>$libelle,
+            //"produits"=>[]
          ];
          //Ajouter la categorie dans le Tableau
          $categories[]= $categorie;
           echo "Une Categorie a ete ajoute avec Success\n";
         break;
         case 2:
-           for ($i=0; $i <count($categories) && $pos==-1 ; $i++) { 
+           for ($i=0; $i <count($categories)  ; $i++) { 
                 echo "ID : ".$categories[$i]["id"]."\n";
                 echo "Libelle : ".$categories[$i]["libelle"]."\n";
             }
         break;
+
+        case 3:
+             do {
+                 $libelle=readline("Entrer le Libelle : ");
+                 $pos=-1;
+               for ($i=0; $i <count($produits) && $pos==-1 ; $i++) { 
+                if ($produits[$i]["libelle"]== $libelle) {
+                    $pos=$i;
+                }
+             }
+             if($pos!=-1){
+                  echo "Le Libelle du Produit existe deja\n";
+             }
+            
+          } while ($pos != -1);
+           do {
+              $prix=(float)readline("Entrer le Prix du Produit ");
+           } while ($prix<=0);
+          do {
+              $qteStock=(int)readline("Entrer le QteStock du Produit ");
+           } while ($qteStock<=0);
+           
+           //Selectionner la categorie du Produit
+            do {
+                for ($i=0; $i <count($categories) && $pos==-1 ; $i++) { 
+                    echo ($i)."-".$categories[$i]["libelle"]."\n";
+                }
+                $indexCat=(int)readline("Entrer l'index de la Categorie ");
+             } while ($indexCat<0 || $indexCat>=count($categories));
+
+             $produit=[
+                "id"=>++$idProd,
+                "libelle"=>$libelle,
+                "prix"=>$prix,
+                "qteStock"=> $qteStock,
+                "mntStock"=>  $prix*$qteStock,
+                "categorie"=>$categories[$indexCat]
+             ];
+            //$categories[$indexCat]["produits"][]= $produit;
+
+            $produits[]=$produit;
+        break;
+        case 4 : 
+              for ($i=0; $i <count($produits)  ; $i++) { 
+                  echo "ID : ".$produits[$i]["id"]."\n";
+                  echo "Libelle : ".$produits[$i]["libelle"]."\n";
+                  echo "Prix du Produit ".$produits[$i]["prix"]."\n";
+                  echo "QteStock du Produit ".$produits[$i]["qteStock"]."\n";
+                  echo "Montant Stock du Produit ".$produits[$i]["mntStock"]."\n";
+                  echo "Categorie du Produit ".$produits[$i]["categorie"]["libelle"]."\n";
+            } 
+            break;
+
+        case 5 :
+            //Selectionner la categorie du Produit
+                do {
+                    for ($i=0; $i <count($categories) && $pos==-1 ; $i++) { 
+                        echo ($i)."-".$categories[$i]["libelle"]."\n";
+                    }
+                    $indexCat=(int)readline("Entrer l'index de la Categorie ");
+                } while ($indexCat<0 || $indexCat>=count($categories)); 
+              for ($i=0; $i <count($produits)  ; $i++) { 
+                if ($produits[$i]["categorie"]["id"]==$categories[$indexCat]["id"]) {
+                    echo "ID : ".$produits[$i]["id"]."\n";
+                    echo "Libelle : ".$produits[$i]["libelle"]."\n";
+                    echo "Prix du Produit ".$produits[$i]["prix"]."\n";
+                    echo "QteStock du Produit ".$produits[$i]["qteStock"]."\n";
+                    echo "Montant Stock du Produit ".$produits[$i]["mntStock"]."\n";
+                    echo "Categorie du Produit ".$produits[$i]["categorie"]["libelle"]."\n";
+                }
+                 
+            } 
+            break;
         default:
             # code...
             break;
